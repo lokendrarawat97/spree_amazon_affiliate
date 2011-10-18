@@ -1,0 +1,13 @@
+---
+en:
+  activerecord:
+    attributes:
+      product:
+        amazon_id: 'Amazon ID'
+  add_to_store: Add to store
+  amazon: Amazon
+  amazon_products: Amazon Products
+  amazon_taxons: Amazon Taxons
+  buy_on_amazon: Buy on Amazon
+  child_taxons: Child Taxons
+  view_products: View Products
