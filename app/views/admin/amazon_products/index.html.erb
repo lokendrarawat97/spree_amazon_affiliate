@@ -1,13 +1,5 @@
 <%= render :partial => 'admin/shared/amazon_sub_menu' %>
 
-<div class='toolbar'>
-  <ul class='actions'>
-    <li>
-    </li>
-  </ul>
-  <br class='clear' />
-</div>
-
 <h1><%= t("amazon_products") %></h1>
 
 <table class="index">
@@ -21,31 +13,16 @@
   <tbody>
     <% @amazon_products.each do |product|%>
       <tr data-hook="admin_amazon_products_index_rows">
-        <td><%=  %></td>
+        <td><%= link_to image_tag(product.images.first.attachment.url), product.url, :alt => product.name, :target => '_blank' %></td>
         <td><%= product.id %></td>
         <td><%= product.price %></td>
         <td><%= link_to product.name, product.url, :target => '_blank' %></td>
         <td><%= link_to t(:add_to_store), admin_amazon_products_path(:asin => product.id), :method => 'POST' %></td>
       </tr>
-      <tr data-hook="admin_amazon_products_index_rows">
-        <td colspan='5'><%= product.inspect%></td>
-      </tr>
     <% end %>
   </tbody>
 </table>
 
-<!-- <% content_for :sidebar do %>
-  <div class="box" data-hook="admin_amazon_products_index_search">
-    <h3><%= t(:search) %></h3>
-    <% @search = Product.search %>
-    <%= form_for [:admin, @search] do |f| %>
-      <p>
-        <%= t(:name) %><br />
-        <%= f.text_field :name_contains, :size =>18 %>
-      </p>
-      <div data-hook="admin_amazon_products_index_search_buttons">
-        <p><%= button t(:search) %></p>
-      </div>
-    <% end %>
-  </div>
-<% end %> -->
+<%= paginate @amazon_products %>
+
+<%= render :partial => 'admin/shared/amazon_product_search' %>

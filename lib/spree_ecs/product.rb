@@ -5,18 +5,25 @@ module SpreeEcs
 
       # Search products
       #
-      def search(options={ })
-        @query = options.delete(:q) || (options[:browse_node] ? '' : '*')
-        @options = (Spree::Config.amazon_options[:query][:options]).merge(options)
-        @options.delete(:sort) if @options[:search_index] && @options[:search_index].to_s == 'All'
+      def search(options={})
+        @query = options.delete(:q)
+        @options = Spree::Config.amazon_options[:query][:options].merge(options)
+        # You cannot use Sort option if searching the All index: 
+        # http://docs.amazonwebservices.com/AWSECommerceService/2011-08-01/DG/index.html?CommonItemSearchParameters.html#BlendedSearches
+        @options.delete(:sort) if @options[:search_index] == 'All'
+        # If searching with BrowseNode can't set SearchIndex as All
+        @options.delete(:search_index) if @options[:browse_node] && @options[:search_index] == 'All'
+        # Inserts query setting when user configuration appends to all queries.
         @query = Spree::Config.amazon_options[:query][:q].to_s.gsub("%{q}", @query)
+
         cache("spree_ecs:product:search:#{@query}:#{@options.stringify_keys.sort}") {
-          log "search products query: #{@query} || options #{options.inspect}"
+          log "spree_ecs:product:search: #{@query}; @options #{@options.inspect}"
           @response = Amazon::Ecs.item_search(@query, @options)
           {
-            :total_entries => @response.total_pages,
             :current_page  => (@response.item_page.to_i == 0 ? 1 : @response.item_page.to_i),
-            :products      => @response.items.map{ |item| mapped(item) }
+            :num_pages     => @response.total_pages,
+            :products      => @response.items.map{ |item| mapped(item) },
+            :total_entries => @response.total_results
           }
         }
       end
@@ -25,8 +32,8 @@ module SpreeEcs
       #
       def find(asin, options={ })
         cache("spree_ecs:product:find:#{asin}:#{options.stringify_keys.sort}") do
-          log("find product asin:#{asin} || options: #{options.inspect}")
-          mapped(Amazon::Ecs.item_lookup(asin, ({ :response_group => "Large, Accessories" }).merge(options)).items.first)
+          log("spree_ecs:product:find: asin: #{asin}; options: #{options.inspect}")
+          mapped(Amazon::Ecs.item_lookup(asin, {:response_group => "Large, Accessories"}.merge(options)).items.first)
         end
       end
 
@@ -34,25 +41,26 @@ module SpreeEcs
       #
       def multi_find(asins, options={ })
         cache("spree_ecs:product:multifind:#{asins}:#{options.stringify_keys.sort}") do
-          log(" multi find product asin:#{asins} || options: #{options.inspect}")
-          Amazon::Ecs.item_lookup(asins, ({ :response_group => "Large, Accessories" }).merge(options)).items.map{|v| mapped(v) }
+          log("spree_ecs:product:multifind: asin: #{asins}; options: #{options.inspect}")
+          Amazon::Ecs.item_lookup(asins, {:response_group => "Large, Accessories"}.merge(options)).items.map{ |v| mapped(v) }
         end
       end
 
       private
 
       def mapped(item)
+        log "MAPPED: #{item}"
         {
-          :name               => item.get('ItemAttributes/Title'),
           :description        => item.get('EditorialReviews/EditorialReview/Content'),
           :id                 => item.get('ASIN'),
-          :price              => (item.get('OfferSummary/LowestNewPrice/FormattedPrice').gsub(/\$|,|\ /,'').to_f rescue 0),
-          :url                => item.get('DetailPageURL'),
-          :taxons             => parse_taxons(item),
           :images             => parse_images(item),
+          :name               => item.get('ItemAttributes/Title'),
+          :price              => (item.get('OfferSummary/LowestNewPrice/FormattedPrice').gsub(/\$|,|\ /,'').to_f rescue 0),
+          :taxons             => parse_taxons(item),
+          :url                => item.get('DetailPageURL'),
           :variants           => parse_variants(item),
-          :variant_options    => parse_variant_options(item),
-          :variant_attributes => parse_variant_attributes(item)
+          :variant_attributes => parse_variant_attributes(item),
+          :variant_options    => parse_variant_options(item)
         }
       end
 

@@ -22,18 +22,10 @@ module SpreeEcs
 
       private
 
-      def parse_browse_node(raw_data)
-        doc = raw_data.doc
-        log doc
-        Rails.logger.debug doc
-        browse_node_id = (doc/'BrowseNodes/BrowseNode/BrowseNodeId').text
-        {
-          :name         => (doc/'BrowseNodes/BrowseNode/Name').text.gsub('&amp;', '&'),
-          :id           => browse_node_id,
-          :search_index => 'All',
-          :children     => children(browse_node_id, doc),
-          :ancestors    => ancestors(doc)
-        }
+      def ancestors(doc)
+        (doc/"Ancestors").map{ |v| parse_ancestor_node(v/"BrowseNode")}
+      rescue
+        []
       end
 
       def children(browse_node_id, doc)
@@ -41,21 +33,28 @@ module SpreeEcs
           {
             :name         => v.at('Name').text.gsub('&amp;', '&'),
             :id           => v.at('BrowseNodeId').text,
-            :search_index => 'All',
             :parent_id    => browse_node_id
           }
         }
       end
 
-      def ancestors(doc)
-        (doc/"Ancestors").map{ |v| parse_ancestor_node(v/"BrowseNode")}
-      rescue
-        []
-      end
-
       def parse_ancestor_node(node)
         { :name => node.at('Name').text.gsub('&amp;', '&'), :id => node.at('BrowseNodeId').text }
       end
+      
+      def parse_browse_node(raw_data)
+        doc = raw_data.doc
+        log doc
+        Rails.logger.debug "PARSE BROWSE NODE #{doc}"
+        browse_node_id = (doc/'BrowseNodes/BrowseNode/BrowseNodeId').text
+        {
+          :id           => browse_node_id,
+          :name         => (doc/'BrowseNodes/BrowseNode/Name').text.gsub('&amp;', '&'),
+          :ancestors    => ancestors(doc),
+          :children     => children(browse_node_id, doc)
+        }
+      end
+
     end # end class << self
 
   end

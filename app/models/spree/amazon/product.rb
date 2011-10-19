@@ -14,19 +14,6 @@ module Spree
           "Spree::Amazon::Product"
         end
 
-        def name
-          "Product"
-        end
-
-        def prepare_id(product_id)
-          product_id.to_s
-        end
-
-        # Product for home page
-        def root_page(options)
-          self.search(({:q => " *", :search_index => "All"}).merge(options) )
-        end
-
         # Find product by ASIN
         #
         def find(product_asin)
@@ -37,19 +24,12 @@ module Spree
           SpreeEcs::Product.multi_find(asins, { :response_group => "Large, Variations" }).map{|v| new(v) }
         end
 
-        # Search products
-        #
-        def search(options={ })
-          @results = SpreeEcs::Product.search(options)
-          unless @results.blank?
-            Spree::Amazon::ProductCollection.build({ :products => @results[:products].map { |item| new(item) },
-                                                     :total_entries => @results[:total_entries],
-                                                     :current_page => @results[:current_page],
-                                                     :search_index => options[:search_index]
-                                                   })
-          else
-            Spree::Amazon::ProductCollection.empty_build
-          end
+        def name
+          "Product"
+        end
+
+        def prepare_id(product_id)
+          product_id.to_s
         end
 
         def save_to_spree_or_find(amazon_id_or_id)
@@ -57,6 +37,26 @@ module Spree
             @product = find(amazon_id_or_id).try(:save_to_spree)
           end
           @product
+        end
+
+        # Search products
+        #
+        def search(options={})
+          options[:q] ||= '*'
+          Rails.logger.debug "SEARCH OPTS #{options.inspect}"
+          @results = SpreeEcs::Product.search(options)
+          unless @results.blank?
+            Spree::Amazon::ProductCollection.build({
+                                                    :current_page  => @results[:current_page],
+                                                    :products      => @results[:products].map{ |item| new(item) },
+                                                    :total_entries => @results[:total_entries],
+                                                    :num_pages     => @results[:num_pages],
+                                                    :per_page      => 10,
+                                                    :search_index  => options[:search_index]
+                                                   })
+          else
+            Spree::Amazon::ProductCollection.build_empty
+          end
         end
 
       end # end class << self

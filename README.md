@@ -3,10 +3,12 @@ SpreeAmazonAffiliate
 
 The purpose of this Spree extension is to allow store admins to easily add products from Amazon to their store through the admin interface.  When viewing the Amazon product page rather than adding the product to the cart the user will be sent to Amazon's product page using an Amazon Affiliate link.
 
+[![Build Status](https://secure.travis-ci.org/jdutil/spree_amazon_affiliate.png)](http://travis-ci.org/jdutil/spree_amazon_affiliate)
+
 Installation
 ------------
 
-Add to Gemfile:
+Add to `Gemfile`:
 
     gem 'spree_amazon_affiliate', :git => 'git://github.com/jdutil/spree_amazon_affiliate'
 
@@ -45,13 +47,12 @@ Testing
 
     $ bundle exec rspec spec
 
-Todo
+TODO
 ----
 
-* add pagination to product index page
-* improve product index page details
-* better test coverage
-* add product search
 * ability to set amazon settings in admin
+* improve product pages link to amazon (style, associate link lookup, verify click tracking)
+* better test coverage
+* translate to new languages
 
 Copyright (c) 2011 Jeff Dutil, released under the New BSD License

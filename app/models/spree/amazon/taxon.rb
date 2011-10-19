@@ -1,29 +1,22 @@
 module Spree
   module Amazon
     class Taxon < Spree::Amazon::Base
-      include ActiveModel::AttributeMethods
-      extend ActiveModel::Callbacks
-      attr_accessor :id, :parent_id, :is_parent, :name, :status, :is_root, :search_index, :children
+
+      attr_accessor :id, :parent_id, :is_parent, :name, :status, :search_index, :children
       attr_accessor :children, :ancestors
       alias :is_parent? :is_parent
 
-      ROOT_TAXONS = Spree::Config.amazon_options[:root_taxons]
+      ROOT_TAXONS = Spree::Config.amazon_options[:root_taxons].freeze
 
       class << self
-        attr_accessor :root_category
-
-        def root_category
-          @root_category ||= new(:name => "Categories", :id => "0000", :is_root => true)
-          @root_category
-        end
-
-        def roots
-          @@roots ||= ROOT_TAXONS.map{ |x| new(:id => x[:id], :name => x[:name], :children => []) }
-          @@roots
-        end
 
         def find(cid)
           new(SpreeEcs::Taxon.find(cid))
+        end
+
+        def roots
+          @@roots ||= ROOT_TAXONS.map{ |x| find(x[:id]) }
+          @@roots
         end
 
       end # end class << self
@@ -35,21 +28,13 @@ module Spree
         @taxon_products
       end
 
-      def root
-        is_root ? self.class.root_category : self
-      end
-
       def permalink
         @id.to_s
       end
 
       def children
-        if self.id.to_s == '0000'
-          self.class.roots
-        else
-          @_children ||= (@children || []).map{ |v| self.class.new(v) }
-          @_children
-        end
+        @_children ||= (@children || []).map{ |v| self.class.new(v) }
+        @_children
       end
 
       def parent
@@ -69,7 +54,7 @@ module Spree
         []
       end
 
-      def is_root
+      def root?
         Spree::Amazon::Taxon.roots.find{ |v| v.id.to_s == self.id.to_s }
       end
     end

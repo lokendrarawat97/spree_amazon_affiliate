@@ -28,6 +28,7 @@ module Spree
           Spree::Amazon::VariantCollection.new( (variants).map{ |x| new(x.merge(:product => product)) } )
         end
       end
+
     end
 
   end

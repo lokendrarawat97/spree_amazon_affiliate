@@ -9,9 +9,9 @@ class Admin::AmazonProductsController < Admin::BaseController
   end
 
   def index
-    @searcher = Spree::Search::Amazon.new(params.merge(:taxon => params[:taxon_id]))
-    # @searcher = Spree::Search::Amazon.new(params)
+    @searcher = Spree::Search::Amazon.new(params)
     @amazon_products = @searcher.retrieve_products
+    Rails.logger.debug "@AMAZONPRODs FIRST #{@amazon_products.first.inspect}"
   end
 
 end

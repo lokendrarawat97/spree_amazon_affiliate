@@ -2,18 +2,14 @@ require 'spec_helper'
 
 describe Admin::AmazonTaxonsController do
 
-  context "#authorize_admin" do
-    let(:user) { User.new }
+  it "should render index successfully" do
+    get :index
+    response.should be_success
+    assigns[:taxons].should eql(@taxons = Spree::Amazon::Taxon.roots)
 
-    before do
-      controller.stub :current_user => user
-    end
-
-    it "should render index successfully" do
-      get :index
-      response.should render_template :index
-    end
-
+    get :index, :taxon_id => Spree::Amazon::Taxon.roots.first.id
+    response.should be_success
+    assigns[:taxons].map(&:id).should  eql(Spree::Amazon::Taxon.roots.first.children.map(&:id))
   end
 
 end

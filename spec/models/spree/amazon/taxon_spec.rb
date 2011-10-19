@@ -4,7 +4,7 @@ describe Spree::Amazon::Taxon do
 
   context "find taxon" do
     it "should return roots taxons" do
-      Spree::Amazon::Taxon.roots.map(&:name).should == YAML.load(File.open(File.join(Rails.root,'config', 'amazon_affiliate.yml')))[Rails.env][:root_taxons].map{ |v| v[:name] }
+      Spree::Amazon::Taxon.roots.map(&:id).should == YAML.load(File.open(File.join(Rails.root,'config', 'amazon_affiliate.yml')))[Rails.env][:root_taxons].map{ |v| v[:id].to_s }
     end
 
     it "should return taxon" do
@@ -13,6 +13,7 @@ describe Spree::Amazon::Taxon do
       @taxon.class.should == Spree::Amazon::Taxon
       @taxon.name.should  =="Laptops"
       @taxon.id.should    =="565108"
+      # TODO: Check search_index set properly
     end
   end
 
@@ -51,6 +52,6 @@ describe Spree::Amazon::Taxon do
 
   it "check is root taxon" do
     @root_taxons =  Spree::Amazon::Taxon.roots
-    @root_taxons[0].is_root.should be_true
+    @root_taxons[0].root?.should be_true
   end
 end
