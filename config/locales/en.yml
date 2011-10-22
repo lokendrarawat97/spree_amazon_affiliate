@@ -3,7 +3,7 @@ en:
   activerecord:
     attributes:
       product:
-        amazon_id: 'Amazon ID'
+        amazon_id: Amazon ID
   add_to_store: Add to store
   amazon: Amazon
   amazon_products: Amazon Products
