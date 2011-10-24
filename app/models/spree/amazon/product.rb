@@ -17,7 +17,7 @@ module Spree
         # Find product by ASIN
         #
         def find(product_asin)
-          new( SpreeEcs::Product.find(product_asin, { :response_group => "Large, Variations" }))
+          new(SpreeEcs::Product.find(product_asin, { :response_group => "Large, Variations" }))
         end
 
         def multi_find(asins)
@@ -33,6 +33,7 @@ module Spree
         end
 
         def save_to_spree_or_find(amazon_id_or_id)
+          return nil unless amazon_id_or_id.present? # TODO: Raise ArgumentError instead? would need to change how controller handles create action.
           unless @product = ::Product.find_by_amazon_id(amazon_id_or_id)
             @product = find(amazon_id_or_id).try(:save_to_spree)
           end
@@ -101,13 +102,14 @@ module Spree
         ::Product.save_from_amazon({
                                      :attributes =>{
                                        :amazon_id      => self.id,
+                                       :count_on_hand  => 1, # TODO: Remove this if there is always varients, which so far appears to be the case.
                                        :sku            => self.id,
                                        :name           => self.name,
-                                       :count_on_hand  => 10,
                                        :available_on   => 1.day.ago,
                                        :description    => self.description,
                                        :price          => self.price.to_f
                                      },
+                                     :count_on_hand  => 1,
                                      :price => self.price.to_f,
                                      :images => self.images
                                    })

@@ -30,7 +30,7 @@ module SpreeEcs
 
       # Find product by asin
       #
-      def find(asin, options={ })
+      def find(asin, options={})
         cache("spree_ecs:product:find:#{asin}:#{options.stringify_keys.sort}") do
           log("spree_ecs:product:find: asin: #{asin}; options: #{options.inspect}")
           mapped(Amazon::Ecs.item_lookup(asin, {:response_group => "Large, Accessories"}.merge(options)).items.first)
@@ -39,7 +39,7 @@ module SpreeEcs
 
       # MultiFind product by asin
       #
-      def multi_find(asins, options={ })
+      def multi_find(asins, options={})
         cache("spree_ecs:product:multifind:#{asins}:#{options.stringify_keys.sort}") do
           log("spree_ecs:product:multifind: asin: #{asins}; options: #{options.inspect}")
           Amazon::Ecs.item_lookup(asins, {:response_group => "Large, Accessories"}.merge(options)).items.map{ |v| mapped(v) }
@@ -50,6 +50,7 @@ module SpreeEcs
 
       def mapped(item)
         log "MAPPED: #{item}"
+        return {} if item.nil?
         {
           :description        => item.get('EditorialReviews/EditorialReview/Content'),
           :id                 => item.get('ASIN'),

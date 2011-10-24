@@ -3,12 +3,11 @@ require 'spec_helper'
 describe Admin::AmazonProductsController do
 
   it 'should create a spree product from amazon product' do
-    pending 'Fix undefined method error find_by_amazon_id when running specs, it works when being used...'
     post :create
-    response.should be_redirected_to(admin_amazon_products_path)
+    response.should redirect_to(admin_amazon_products_path)
 
     post :create, :asin => 'B003C4YIFE'
-    response.should be_redirected_to(edit_admin_product_path(assigns[:product]))
+    response.should redirect_to(edit_admin_product_path(assigns[:product]))
   end
 
   it "should render index successfully" do

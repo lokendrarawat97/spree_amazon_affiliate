@@ -8,4 +8,5 @@ tmp
 nbproject
 *.swp
 spec/dummy/log
+spec/dummy/public/spree
 spec/dummy/tmp
