@@ -51,7 +51,6 @@ TODO
 ----
 
 * ability to set amazon settings in admin
-* improve product pages link to amazon
 * better test coverage
 * translate to new languages
 
