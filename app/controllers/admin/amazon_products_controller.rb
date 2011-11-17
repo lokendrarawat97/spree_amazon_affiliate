@@ -1,4 +1,4 @@
-class Admin::AmazonProductsController < Admin::BaseController
+class Admin::AmazonProductsController < Spree::Admin::BaseController
 
   def create
     if @product = Spree::Amazon::Product.save_to_spree_or_find(params[:asin])

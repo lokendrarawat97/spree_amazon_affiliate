@@ -14,6 +14,7 @@ module SpreeEcs
       # Find category by BrowseNodeId
       #
       def find(id)
+        return nil if id.nil?
         cache("spree_ecs:taxon:#{id}"){
           log("Find Taxon: #{id} ")
           parse_browse_node(Amazon::Ecs.browse_node_lookup(id, {:response_group => "BrowseNodeInfo"}))

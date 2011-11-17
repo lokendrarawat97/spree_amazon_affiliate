@@ -1,4 +1,4 @@
-class Admin::AmazonTaxonsController < Admin::BaseController
+class Admin::AmazonTaxonsController < Spree::Admin::BaseController
 
   def index
     if params[:taxon_id]
