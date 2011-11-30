@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Spree::Search::Amazon do
+describe Spree::Core::Search::Amazon do
 
   describe 'retrieve_products' do
     pending 'returns Spree::Amazon::ProductCollection'
