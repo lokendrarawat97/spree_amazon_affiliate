@@ -6,7 +6,8 @@ module Spree
       attr_accessor :children, :ancestors
       alias :is_parent? :is_parent
 
-      ROOT_TAXONS = Spree::Config.amazon_options[:root_taxons].freeze
+      # ROOT_TAXONS = Spree::Config.amazon_options[:root_taxons].freeze
+      ROOT_TAXONS = SpreeAmazonAffiliate::Engine.amazon_options[:root_taxons].freeze
 
       class << self
 
