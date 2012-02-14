@@ -45,6 +45,7 @@ Here are some ways *you* can contribute:
 Testing
 -------
 
+    $ bundle exec rake test_app
     $ bundle exec rspec spec
 
 TODO

@@ -7,14 +7,16 @@ module SpreeEcs
       #
       def search(options={})
         @query = options.delete(:q)
-        @options = Spree::Config.amazon_options[:query][:options].merge(options)
+        # @options = Spree::Config.amazon_options[:query][:options].merge(options)
+        @options = SpreeAmazonAffiliate::Engine.amazon_options[:query][:options].merge(options)
         # You cannot use Sort option if searching the All index: 
         # http://docs.amazonwebservices.com/AWSECommerceService/2011-08-01/DG/index.html?CommonItemSearchParameters.html#BlendedSearches
         @options.delete(:sort) if @options[:search_index] == 'All'
         # If searching with BrowseNode can't set SearchIndex as All
         @options.delete(:search_index) if @options[:browse_node] && @options[:search_index] == 'All'
         # Inserts query setting when user configuration appends to all queries.
-        @query = Spree::Config.amazon_options[:query][:q].to_s.gsub("%{q}", @query)
+        # @query = Spree::Config.amazon_options[:query][:q].to_s.gsub("%{q}", @query)
+        @query = SpreeAmazonAffiliate::Engine.amazon_options[:query][:q].to_s.gsub("%{q}", @query)
 
         cache("spree_ecs:product:search:#{@query}:#{@options.stringify_keys.sort}") {
           log "spree_ecs:product:search: #{@query}; @options #{@options.inspect}"

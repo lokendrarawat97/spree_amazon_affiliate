@@ -13,20 +13,13 @@ ActiveRecord::Migrator.migrate File.expand_path("../dummy/db/migrate/", __FILE__
 Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
 # Requires factories defined in spree_core
-require 'spree_core/testing_support/factories'
+require 'spree/core/testing_support/factories'
 
 RSpec.configure do |config|
-  # == Mock Framework
-  #
-  # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:
-  #
-  # config.mock_with :mocha
-  # config.mock_with :flexmock
-  # config.mock_with :rr
-  config.mock_with :rspec
-
-  # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-  config.fixture_path = "#{::Rails.root}/spec/fixtures"
+  # Copy over the config file which should really be done by running the extension installer
+  config.after(:all) do
+    FileUtils.cp File.join(File.dirname(__FILE__), '..', 'config', 'amazon_affiliate.yml'), File.join(Rails.root, 'config', 'amazon_affiliate.yml')
+  end
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false

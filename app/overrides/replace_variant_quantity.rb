@@ -1,4 +1,4 @@
-Deface::Override.new(:virtual_path => "products/_cart_form",
+Deface::Override.new(:virtual_path => "spree/products/_cart_form",
                      :name => "replace_variant_quantity",
                      :replace => "code[erb-loud]:contains('quantity')",
                      :text => '<% unless @product.amazon_id.present? %>
