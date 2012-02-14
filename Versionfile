@@ -2,4 +2,4 @@
 # Please see http://spreecommerce.com/documentation/extensions.html#versionfile for details
 
 "1.0.x"  => { :branch => "master" }
-"0.70.x" => { :ref => "fcd589f205" }
+"0.70.x" => { :ref => "3cfe3897bf" }
