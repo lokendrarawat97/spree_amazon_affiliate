@@ -84,29 +84,19 @@ module SpreeEcs
       end
 
       def parse_images(item)
-        result_images = []
-        unless item.get('SmallImage/URL').blank?
-          result_images << {
-            :small   => item.get('SmallImage/URL'),
-            :mini    => item.get('SmallImage/URL'),
-            :product => item.get('MediumImage/URL'),
-            :large   => item.get('LargeImage/URL')
-          }
-        end
-        @imagesets = item.get_element("ImageSets").get_elements("ImageSet") rescue nil
-        unless @imagesets.blank?
-          @imagesets.each do |imageset|
-            if imageset.attributes['category'].to_s =~ /variant/
-              result_images << {
-                :mini    => imageset.get_hash("SmallImage")[:url],
-                :small   => imageset.get_hash("SmallImage")[:url],
-                :product => imageset.get_hash("MediumImage")[:url],
-                :large   => imageset.get_hash("LargeImage")[:url]
-              }
-            end
+        images = []
+        image_sets = item.get_elements("ImageSets/ImageSet")
+        if image_sets.present?
+          image_sets.each do |image_set|
+            images << {
+              :mini    => image_set.get('SmallImage/URL'),
+              :small   => image_set.get('SmallImage/URL'),
+              :product => image_set.get('MediumImage/URL'),
+              :large   => image_set.get('LargeImage/URL')
+            }
           end
         end
-        return result_images
+        return images
       end
 
       def parse_variants(item)

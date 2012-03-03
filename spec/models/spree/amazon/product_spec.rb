@@ -5,18 +5,18 @@ describe Spree::Amazon::Product do
   describe '#save_to_spree' do
 
     before do
-      amazon_prod = subject.class.find('B0051VVOB2')
+      amazon_prod = subject.class.find('B005CWIVYI')
       amazon_prod.save_to_spree
     end
 
     it 'should create a spree product with images' do
-      spree_prod = Spree::Product.find_by_amazon_id('B0051VVOB2')
+      spree_prod = Spree::Product.find_by_amazon_id('B005CWIVYI')
       spree_prod.should be_present
-      spree_prod.images.should be_present
+      spree_prod.images.size.should be > 1
     end
 
     it 'should create a master variant with stock' do
-      spree_prod = Spree::Product.find_by_amazon_id('B0051VVOB2')
+      spree_prod = Spree::Product.find_by_amazon_id('B005CWIVYI')
       spree_prod.master.should be_present
       spree_prod.master.count_on_hand.should eql(1)
     end

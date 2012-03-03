@@ -2,7 +2,7 @@
 Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.name        = 'spree_amazon_affiliate'
-  s.version     = '0.70.0'
+  s.version     = '1.0.0.beta'
   s.summary     = 'The Amazon Affiliate extension for Spree allows the import of Amazon products into your store, and will link to Amazon rather than the cart.'
   s.description = 'The Amazon Affiliate extension for Spree allows the import of Amazon products into your store, and will link to Amazon rather than the cart.'
   s.required_ruby_version = '>= 1.8.7'
