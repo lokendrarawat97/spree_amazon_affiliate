@@ -12,8 +12,7 @@ module Spree
         end
 
         def retrieve_products
-          curr_page = manage_pagination && keywords ? 1 : page
-          options   = {:item_page => curr_page }
+          options   = {:item_page => page}
           # Set search query
           options.merge!({:q => keywords}) if keywords
           # Set Taxon options if searching a particular Taxon

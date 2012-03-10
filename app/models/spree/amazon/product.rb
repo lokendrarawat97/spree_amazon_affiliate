@@ -1,4 +1,6 @@
+require 'htmlentities'
 require 'open-uri'
+
 module Spree
   module Amazon
 
@@ -104,9 +106,9 @@ module Spree
                                        :amazon_id      => self.id,
                                        :count_on_hand  => 1, # TODO: Remove this if there is always varients, which so far appears to be the case.
                                        :sku            => self.id,
-                                       :name           => self.name,
+                                       :name           => coder.decode(self.name),
                                        :available_on   => 1.day.ago,
-                                       :description    => self.description,
+                                       :description    => coder.decode(self.description),
                                        :price          => self.price.to_f
                                      },
                                      :count_on_hand  => 1,
@@ -126,6 +128,12 @@ module Spree
       def variants
         @_variants ||= Spree::Amazon::Variant.build_variants_collection(self, @variants)
         @_variants
+      end
+
+      private
+
+      def coder
+        @coder ||= HTMLEntities.new
       end
 
     end

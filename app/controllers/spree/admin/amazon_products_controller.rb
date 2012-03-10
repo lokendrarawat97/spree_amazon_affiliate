@@ -11,7 +11,6 @@ class Spree::Admin::AmazonProductsController < Spree::Admin::BaseController
   def index
     @searcher = Spree::Core::Search::Amazon.new(params)
     @amazon_products = @searcher.retrieve_products
-    Rails.logger.debug "@AMAZONPRODs FIRST #{@amazon_products.first.inspect}"
   end
 
 end

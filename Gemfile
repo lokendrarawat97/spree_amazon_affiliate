@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-# Temp fix for: uninitialized constant Spree::User::DestroyWithOrdersError until v1.0.1
+# Temp fix until v1.1.0
 gem 'spree', :git => 'https://github.com/spree/spree.git'
 
 group :test do
