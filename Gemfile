@@ -1,11 +1,7 @@
 source 'http://rubygems.org'
 
-# Temp fix until v1.1.0
-gem 'spree', :git => 'https://github.com/spree/spree.git'
-
-group :test do
-  gem 'ffaker'
-end
+# TODO This is used to test against Rails 3.2 remove when Spree 1.1.x is released.
+gem 'spree_core', :git => 'git@github.com:spree/spree.git'
 
 if RUBY_VERSION < "1.9"
   gem "ruby-debug"
