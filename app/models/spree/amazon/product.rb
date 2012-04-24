@@ -3,18 +3,11 @@ require 'open-uri'
 
 module Spree
   module Amazon
-
     class Product < Spree::Amazon::Base
 
       attr_accessor :price, :name, :taxon_id, :id, :description, :images, :url, :variants, :taxons
-      attr_accessor :taxon_name, :binds, :props_str, :sale_props, :props, :created_at, :updated_at
-      attr_accessor :variant_options, :variant_attributes
 
       class << self
-
-        def class_name
-          "Spree::Amazon::Product"
-        end
 
         # Find product by ASIN
         #
@@ -23,11 +16,7 @@ module Spree
         end
 
         def multi_find(asins)
-          SpreeEcs::Product.multi_find(asins, { :response_group => "Large, Variations" }).map{|v| new(v) }
-        end
-
-        def name
-          "Product"
+          SpreeEcs::Product.multi_find(asins, { :response_group => "Large, Variations" }).map{ |v| new(v) }
         end
 
         def prepare_id(product_id)
@@ -35,7 +24,7 @@ module Spree
         end
 
         def save_to_spree_or_find(amazon_id_or_id)
-          return nil unless amazon_id_or_id.present? # TODO: Raise ArgumentError instead? would need to change how controller handles create action.
+          return nil unless amazon_id_or_id.present? # TODO: Deprecate and change to simply save_to_spree for create/update
           unless @product = ::Spree::Product.find_by_amazon_id(amazon_id_or_id)
             @product = find(amazon_id_or_id).try(:save_to_spree)
           end
@@ -63,14 +52,6 @@ module Spree
         end
 
       end # end class << self
-
-      def available?
-        true
-      end
-
-      def has_stock?
-        true
-      end
 
       def has_variants?
         !@variants.blank?
@@ -103,26 +84,21 @@ module Spree
       def save_to_spree
         ::Spree::Product.save_from_amazon({
                                      :attributes =>{
-                                       :amazon_id      => self.id,
-                                       :count_on_hand  => 1, # TODO: Remove this if there is always varients, which so far appears to be the case.
                                        :sku            => self.id,
                                        :name           => coder.decode(self.name),
                                        :available_on   => 1.day.ago,
                                        :description    => coder.decode(self.description),
                                        :price          => self.price.to_f
                                      },
-                                     :count_on_hand  => 1,
-                                     :price => self.price.to_f,
-                                     :images => self.images
+                                     :asin          => self.id,
+                                     :count_on_hand => 1,
+                                     :price         => self.price.to_f,
+                                     :images        => self.images
                                    })
       end
 
       def taxons
         @taxons.map{ |x| Spree::Amazon::Taxon.find(x[:id]) }
-      end
-
-      def to_param
-        "#{self.id}"
       end
 
       def variants
@@ -138,5 +114,4 @@ module Spree
 
     end
   end
-
 end

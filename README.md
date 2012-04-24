@@ -52,8 +52,12 @@ Testing
 TODO
 ----
 
+* saving a product from amazon should properly handle variants
+* move import code from controller into a class, and add delayed job
+* import validation / wrap into a single transaction
 * ability to set amazon settings in admin
-* better test coverage
+* better test coverage / remove defunct code
+* use official aws-sdk gem rather than amazon-ecs
 * translate to new languages
 
 Copyright (c) 2011 Jeff Dutil, released under the New BSD License

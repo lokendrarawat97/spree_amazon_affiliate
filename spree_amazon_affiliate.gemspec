@@ -23,6 +23,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'capybara',     '~> 1.1'
   s.add_development_dependency 'factory_girl', '~> 2.6'
   s.add_development_dependency 'ffaker',       '~> 1.12'
-  s.add_development_dependency 'rspec-rails',  '~> 2.8'
-  s.add_development_dependency 'sqlite3',      '~> 1.3.5'
+  s.add_development_dependency 'rspec-rails',  '~> 2.9'
+  s.add_development_dependency 'simplecov',    '~> 0.6.2'
+  s.add_development_dependency 'sqlite3',      '~> 1.3.6'
 end

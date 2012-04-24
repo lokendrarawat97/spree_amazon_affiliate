@@ -17,7 +17,7 @@
         <td><%= product.id %></td>
         <td><%= product.price %></td>
         <td><%= link_to product.name.html_safe, amazon_affiliate_url(product.id), :target => '_blank' %></td>
-        <td><%= link_to t(:add_to_store), admin_amazon_products_path(:asin => product.id), :method => 'POST' %></td>
+        <td><%= button_to t(:add_to_store), admin_amazon_products_path(:asin => product.id), :method => 'POST' %></td>
       </tr>
     <% end %>
   </tbody>

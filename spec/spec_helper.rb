@@ -1,3 +1,7 @@
+# Run Coverage report
+require 'simplecov'
+SimpleCov.start
+
 # Configure Rails Environment
 ENV["RAILS_ENV"] = "test"
 
@@ -15,8 +19,11 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
 # Requires factories defined in spree_core
 require 'spree/core/testing_support/factories'
+require 'spree/core/url_helpers'
 
 RSpec.configure do |config|
+  config.include Spree::Core::UrlHelpers
+
   # Copy over the config file which should really be done by running the extension installer
   config.after(:all) do
     FileUtils.cp File.join(File.dirname(__FILE__), '..', 'config', 'amazon_affiliate.yml'), File.join(Rails.root, 'config', 'amazon_affiliate.yml')
