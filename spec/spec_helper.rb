@@ -1,6 +1,17 @@
 # Run Coverage report
-require 'simplecov'
-SimpleCov.start
+unless defined?(Rubinius) or RUBY_VERSION == '1.8.7'
+  require 'simplecov'
+  SimpleCov.start do
+    add_filter '/config/'
+    add_group 'Controllers', 'app/controllers'
+    add_group 'Helpers', 'app/helpers'
+    add_group 'Mailers', 'app/mailers'
+    add_group 'Models', 'app/models'
+    add_group 'Overrides', 'app/overrides'
+    add_group 'Libraries', 'lib'
+    add_group 'Specs', 'spec'
+  end
+end
 
 # Configure Rails Environment
 ENV["RAILS_ENV"] = "test"
