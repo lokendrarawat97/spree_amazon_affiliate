@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Admin - Amazon Taxons' do
+describe 'Admin - Amazon Products' do
 
   before do
     visit spree.admin_path

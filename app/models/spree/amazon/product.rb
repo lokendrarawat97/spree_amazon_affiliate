@@ -5,7 +5,7 @@ module Spree
   module Amazon
     class Product < Spree::Amazon::Base
 
-      attr_accessor :price, :name, :taxon_id, :id, :description, :images, :url, :variants, :taxons
+      attr_accessor :description, :id, :images, :name, :price, :taxons, :variants
 
       class << self
 
@@ -15,20 +15,12 @@ module Spree
           new(SpreeEcs::Product.find(product_asin, { :response_group => "Large, Variations" }))
         end
 
+        def find_and_save_to_spree(asin)
+          find(asin).try(:save_to_spree)
+        end
+
         def multi_find(asins)
           SpreeEcs::Product.multi_find(asins, { :response_group => "Large, Variations" }).map{ |v| new(v) }
-        end
-
-        def prepare_id(product_id)
-          product_id.to_s
-        end
-
-        def save_to_spree_or_find(amazon_id_or_id)
-          return nil unless amazon_id_or_id.present? # TODO: Deprecate and change to simply save_to_spree for create/update
-          unless @product = ::Spree::Product.find_by_amazon_id(amazon_id_or_id)
-            @product = find(amazon_id_or_id).try(:save_to_spree)
-          end
-          @product
         end
 
         # Search products
@@ -65,14 +57,6 @@ module Spree
 
       def master
         self
-      end
-
-      def persisted?
-        false
-      end
-
-      def possible_promotions
-        [ false ]
       end
 
       def price

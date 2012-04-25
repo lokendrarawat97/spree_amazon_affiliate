@@ -4,9 +4,7 @@ class Spree::Admin::AmazonImportsController < Spree::Admin::BaseController
 
   def create
     CSV.foreach(params[:upload_file].path, :headers => true) do |row|
-      if new_product = Spree::Amazon::Product.find(row[0])
-        new_product.save_to_spree
-        product = Spree::Product.find_by_amazon_id(row[0])
+      if product = Spree::Amazon::Product.find_and_save_to_spree(row[0])
         associate_product_with_taxon product, row[1]
         associate_product_with_taxon product, row[2]
       end
