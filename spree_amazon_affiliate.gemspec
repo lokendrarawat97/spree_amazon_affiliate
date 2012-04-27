@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.version     = '1.0.0.beta'
   s.summary     = 'The Amazon Affiliate extension for Spree allows the import of Amazon products into your store, and will link to Amazon rather than the cart.'
   s.description = 'The Amazon Affiliate extension for Spree allows the import of Amazon products into your store, and will link to Amazon rather than the cart.'
-  s.required_ruby_version = '>= 1.8.7'
+  s.required_ruby_version = '>= 1.9.2'
 
   s.author            = 'Jeff Dutil'
   s.email             = 'JDutil@BurlingtonWebApps.com'
