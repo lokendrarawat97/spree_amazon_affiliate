@@ -17,8 +17,15 @@ Spree::Product.class_eval do
       @master.count_on_hand = options[:count_on_hand]
       @master.price = options[:price]
       @master.save 
-      options[:images].map{ |image|
-        @master.images.create(:attachment => open(image.attachment.url(:large)))
+      options[:images].map{ |i|
+        filename = File.basename(i.attachment.url(:large))
+        unless image = @master.images.find_by_attachment_file_name(filename)
+          image = @master.images.build
+        end
+        io = open(i.attachment.url(:large))
+        def io.original_filename; File.basename(base_uri.path); end # Hack to make io.original_filename return an actual filename rather than string.io or jibberish.
+        image.attachment = io
+        image.save
       }
     end
     product
