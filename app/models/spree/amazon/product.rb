@@ -5,6 +5,8 @@ module Spree
   module Amazon
     class Product < Spree::Amazon::Base
 
+      include ActionView::Helpers::SanitizeHelper
+
       attr_accessor :description, :id, :images, :name, :price, :taxons, :variants
 
       class << self
@@ -68,11 +70,12 @@ module Spree
       def save_to_spree
         ::Spree::Product.save_from_amazon({
                                      :attributes =>{
-                                       :sku            => self.id,
-                                       :name           => coder.decode(self.name),
-                                       :available_on   => 1.day.ago,
-                                       :description    => coder.decode(self.description),
-                                       :price          => self.price.to_f
+                                       :available_on     => 1.day.ago,
+                                       :description      => coder.decode(self.description),
+                                       :meta_description => strip_tags(coder.decode(self.description)).truncate(255),
+                                       :name             => coder.decode(self.name),
+                                       :price            => self.price.to_f,
+                                       :sku              => self.id
                                      },
                                      :asin          => self.id,
                                      :count_on_hand => 1,

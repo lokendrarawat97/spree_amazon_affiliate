@@ -46,6 +46,13 @@ describe Spree::Amazon::Product do
         spree_prod.description.should include('<b>')
       end
 
+      it 'should strip html from meta_description' do
+        amazon_prod = subject.class.find('B006ZLX75S')
+        amazon_prod.save_to_spree
+        spree_prod = Spree::Product.find_by_amazon_id('B006ZLX75S')
+        spree_prod.meta_description.should_not include('<b>')
+      end
+
       it 'should update a spree product that already exists' do
         @spree_prod.master.count_on_hand = 0
         @spree_prod.name = 'Test'
