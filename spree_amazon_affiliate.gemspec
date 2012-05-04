@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'amazon-ecs', '~> 2.2.0'
   s.add_dependency 'htmlentities'
-  s.add_dependency 'spree_core', '>= 1.1.0.beta'
+  s.add_dependency 'spree_core', '>= 1.1.0'
 
   s.add_development_dependency 'capybara',     '~> 1.1'
   s.add_development_dependency 'factory_girl', '~> 2.6'
