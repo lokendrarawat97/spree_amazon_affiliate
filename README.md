@@ -2,6 +2,8 @@
 
 The purpose of this Spree extension is to allow store admins to easily add products from Amazon to their store through the admin interface.  When viewing the Amazon product page rather than adding the product to the cart the user will be sent to Amazon's product page using an Amazon Affiliate link.
 
+When running an import of products the work will be offloaded to Delayed::Job if your uses it.
+
 [travis]: http://travis-ci.org/jdutil/spree_amazon_affiliate
 [gemnasium]: https://gemnasium.com/jdutil/spree_amazon_affiliate
 [pledgie]: http://www.pledgie.com/campaigns/16958
@@ -53,7 +55,6 @@ TODO
 ----
 
 * saving a product from amazon should properly handle variants
-* move import code from controller into a class, and add delayed job
 * import validation / wrap into a single transaction
 * ability to set amazon settings in admin
 * better test coverage / remove defunct code
