@@ -22,10 +22,13 @@ Spree::Product.class_eval do
         unless image = @master.images.find_by_attachment_file_name(filename)
           image = @master.images.build
         end
-        io = open(i.attachment.url(:large))
-        def io.original_filename; File.basename(base_uri.path); end # Hack to make io.original_filename return an actual filename rather than string.io or jibberish.
-        image.attachment = io
-        image.save
+        begin
+          io = open(i.attachment.url(:large))
+          def io.original_filename; File.basename(base_uri.path); end # Hack to make io.original_filename return an actual filename rather than string.io or jibberish.
+          image.attachment = io
+          image.save
+        rescue # Rescue 404
+        end
       }
     end
     product
