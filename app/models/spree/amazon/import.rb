@@ -7,7 +7,7 @@ OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
 module Spree
   module Amazon
     class Import < ActiveRecord::Base
-      self.table_name 'spree_amazon_imports'
+      set_table_name 'spree_amazon_imports'
 
       attr_accessible :attachment
       validates_attachment_presence :attachment
