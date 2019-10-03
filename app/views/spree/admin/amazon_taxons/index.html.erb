@@ -12,8 +12,6 @@
       <tr data-hook="admin_amazon_index_rows">
         <td><%= taxon.name %></td>
         <td>
-          <%= link_to t(:child_taxons), admin_amazon_taxons_path(:taxon_id => taxon.id) %>
-          |
           <%= link_to t(:view_products), admin_amazon_products_path(:taxon_id => taxon.id) %>
         </td>
       </tr>
